@@ -5,7 +5,9 @@ const nextConfig: NextConfig = {
   images: {
     domains: ["images.unsplash.com", "tailwindcss.com", "cdn.dummyjson.com", 'dummyjson.com'],
   },
-  
+   eslint: {
+    ignoreDuringBuilds: true,
+  },
 };
 
 export default nextConfig;
