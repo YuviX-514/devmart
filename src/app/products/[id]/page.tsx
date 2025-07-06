@@ -1,5 +1,7 @@
 "use client";
 
+export const dynamic = "force-dynamic";
+
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useCart } from "@/context/cartContext";
@@ -54,7 +56,9 @@ export default function ProductPage() {
       }
     }
 
-    fetchProduct();
+    if (id) {
+      fetchProduct();
+    }
   }, [id]);
 
   if (loading || isLoggedIn === null)
@@ -68,9 +72,7 @@ export default function ProductPage() {
     );
   }
 
-  const itemInCart = cart.find(
-    (item) => item.id === String(product.id)
-  );
+  const itemInCart = cart.find((item) => item.id === String(product.id));
   const currentQty = itemInCart?.quantity || 0;
 
   return (
