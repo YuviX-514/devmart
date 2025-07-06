@@ -120,9 +120,9 @@ export default function Navbar() {
           className="flex items-center gap-3 group text-xl font-extrabold tracking-tight select-none"
         >
           <Image
-            src="/logo.png"
+            src="/favicon.jpg"
             alt="DevMart"
-            width={36}
+            width={50}
             height={36}
             className="rounded-full group-hover:scale-110 transition-transform duration-300 ease-in-out"
           />

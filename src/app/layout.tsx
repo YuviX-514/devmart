@@ -20,6 +20,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "DevMart — Build, Collaborate, Launch",
   description: "Explore DevMart, the ultimate marketplace for dev tools and digital products.",
+  icons: {
+    icon: "/favicon.jpg",
+  },
 };
 
 export const viewport: Viewport = {
@@ -28,13 +31,12 @@ export const viewport: Viewport = {
   themeColor: "#000000",
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
+      <head>
+        <link rel="icon" href="/favicon.jpg" type="image/jpeg" />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
