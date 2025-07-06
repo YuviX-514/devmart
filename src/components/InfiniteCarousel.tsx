@@ -3,7 +3,7 @@ import React from "react";
 
 interface InfiniteCarouselProps {
   images: string[];
-  productIds?: number[]; // 🔁 Optional mapping to real product ids
+  productIds?: number[];
   speed?: number;
 }
 
@@ -39,12 +39,19 @@ export default function InfiniteCarousel({
         .animate-scroll {
           animation: scroll linear infinite;
         }
+
         @keyframes scroll {
           0% {
             transform: translateX(0%);
           }
           100% {
             transform: translateX(-100%);
+          }
+        }
+
+        @media (max-width: 768px) {
+          .animate-scroll {
+            animation-duration: 10s !important;
           }
         }
       `}</style>
