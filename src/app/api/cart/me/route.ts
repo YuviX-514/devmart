@@ -7,10 +7,22 @@ export async function GET(req: Request) {
   try {
     await connectDB();
     const user = await getUserFromToken(req);
-    if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    if (!user) {
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
 
-    return NextResponse.json({ cart: user.cart || [] });
+    return NextResponse.json(
+      { cart: user.cart || [] },
+      { status: 200 }
+    );
   } catch (err) {
-    return NextResponse.json({ error: "Server error" }, { status: 500 });
+    console.error(err);
+    return NextResponse.json(
+      { error: "Server error" },
+      { status: 500 }
+    );
   }
 }

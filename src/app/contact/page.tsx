@@ -7,7 +7,7 @@ export default function ContactPage() {
         you.
       </p>
       <ul className="text-gray-400 mt-4 space-y-2">
-        <li>📧 Email: support@DevMart.io</li>
+        <li>📧 Email: support@devmart.io</li>
         <li>📍 Address: 404 Hacker Street, Silicon Valley, CA</li>
         <li>📞 Phone: +1 (800) 123-4567</li>
       </ul>

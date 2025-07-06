@@ -16,34 +16,50 @@ interface SearchPageProps {
 }
 
 export default async function SearchPage({ searchParams }: SearchPageProps) {
-  const query = searchParams.query || "";
+  const query = searchParams.query?.trim() || "";
 
   let products: Product[] = [];
   let notFound = false;
 
-  const res = await fetch(
-    `https://dummyjson.com/products/search?q=${encodeURIComponent(query)}`
-  );
-  const data = await res.json();
-
-  if (data.products && data.products.length > 0) {
-    products = data.products;
-  } else {
-    const matchedCategory = categories.find((cat) =>
-      cat.keywords.some((kw) =>
-        query.toLowerCase().includes(kw.toLowerCase())
-      )
+  if (!query) {
+    return (
+      <main className="max-w-7xl mx-auto py-30 px-4 text-white">
+        <h1 className="text-2xl font-bold mb-6">Search</h1>
+        <p>Please enter a search term.</p>
+      </main>
     );
+  }
 
-    if (matchedCategory) {
-      const resCat = await fetch(
-        `https://dummyjson.com/products/category/${matchedCategory.query}`
-      );
-      const dataCat = await resCat.json();
-      products = dataCat.products || [];
+  try {
+    const res = await fetch(
+      `https://dummyjson.com/products/search?q=${encodeURIComponent(query)}`,
+      { cache: "no-store" }
+    );
+    const data = await res.json();
+
+    if (data.products && data.products.length > 0) {
+      products = data.products;
     } else {
-      notFound = true;
+      const matchedCategory = categories.find((cat) =>
+        cat.keywords.some((kw) =>
+          query.toLowerCase().includes(kw.toLowerCase())
+        )
+      );
+
+      if (matchedCategory) {
+        const resCat = await fetch(
+          `https://dummyjson.com/products/category/${matchedCategory.query}`,
+          { cache: "no-store" }
+        );
+        const dataCat = await resCat.json();
+        products = dataCat.products || [];
+      } else {
+        notFound = true;
+      }
     }
+  } catch (error) {
+    console.error("Search fetch failed:", error);
+    notFound = true;
   }
 
   return (
@@ -67,7 +83,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
               className="border border-neutral-800 rounded-xl overflow-hidden hover:scale-105 hover:shadow-xl transition-transform duration-300 bg-neutral-900"
             >
               <Image
-                src={product.thumbnail}
+                src={product.thumbnail || "/placeholder.png"}
                 alt={product.title}
                 width={500}
                 height={300}
@@ -77,7 +93,9 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                 <h3 className="text-white font-semibold text-sm">
                   {product.title}
                 </h3>
-                <p className="text-purple-400 text-sm mt-1">${product.price}</p>
+                <p className="text-purple-400 text-sm mt-1">
+                  ₹ {(product.price * 80).toFixed(2)}
+                </p>
               </div>
             </Link>
           ))}

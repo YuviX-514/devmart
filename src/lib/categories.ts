@@ -1,3 +1,4 @@
+
 export interface Category {
   name: string;
   query: string;
@@ -23,6 +24,13 @@ export const categories: Category[] = [
   {
     name: "Groceries",
     query: "groceries",
-    keywords: ["grocery", "vegetable", "fruit", "veggies", "food", "snack"],
+    keywords: [
+      "grocery",
+      "vegetable",
+      "fruit",
+      "veggies",
+      "food",
+      "snack",
+    ],
   },
 ];

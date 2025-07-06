@@ -1,21 +1,20 @@
+// src/lib/mongodb.ts
+
 import mongoose from "mongoose";
 
-let isConnected = false;
-
 export const connectDB = async () => {
-  if (isConnected) return;
+  // Already connected? Do nothing
+  if (mongoose.connection.readyState >= 1) {
+    return;
+  }
 
   try {
     await mongoose.connect(process.env.MONGODB_URI!, {
       dbName: "devmart",
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    } as any);
-
-    isConnected = true;
+    });
     console.log("✅ MongoDB connected");
   } catch (error) {
     console.error("❌ MongoDB connection error:", error);
-    process.exit(1);
+    throw error; // don’t use process.exit() in serverless
   }
 };

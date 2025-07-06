@@ -32,6 +32,7 @@ export default function Navbar() {
       const data = await res.json();
       setIsLoggedIn(res.ok && !!data.user);
     } catch (err) {
+      console.error("Failed to check login:", err);
       setIsLoggedIn(false);
     }
   };
@@ -49,15 +50,20 @@ export default function Navbar() {
   const handleLogout = async () => {
     if (!confirm("Are you sure you want to logout?")) return;
     try {
-      await fetch("/api/auth/logout", {
+      const res = await fetch("/api/auth/logout", {
         method: "POST",
         credentials: "include",
       });
+      if (!res.ok) {
+        alert("Logout failed. Please try again.");
+        return;
+      }
       window.dispatchEvent(new Event("tokenUpdated"));
       alert("🛑 Logged out successfully!");
       window.location.href = "/";
     } catch (err) {
       console.error("❌ Logout failed:", err);
+      alert("Logout failed. Please try again.");
     }
   };
 
@@ -84,7 +90,7 @@ export default function Navbar() {
         setShowSearchDropdown(false);
       }
     } catch (err) {
-      console.error(err);
+      console.error("Search error:", err);
       setSearchResults([]);
       setShowSearchDropdown(false);
     }
@@ -93,7 +99,10 @@ export default function Navbar() {
   const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!searchQuery.trim()) return;
+    if (!searchQuery.trim()) {
+      alert("Please enter a search term.");
+      return;
+    }
 
     router.push(`/search?query=${encodeURIComponent(searchQuery.trim())}`);
     setSearchQuery("");
@@ -169,7 +178,7 @@ export default function Navbar() {
                     }}
                   >
                     <Image
-                      src={product.thumbnail}
+                      src={product.thumbnail || "/placeholder.png"}
                       alt={product.title}
                       width={30}
                       height={30}

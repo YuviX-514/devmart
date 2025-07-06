@@ -9,15 +9,11 @@ import Link from "next/link";
 export default function ThankYouPage() {
   const router = useRouter();
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+  const [redirected, setRedirected] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      router.push("/");
-    }, 6000);
-    return () => clearTimeout(timer);
-  }, [router]);
+    if (typeof window === "undefined") return;
 
-  useEffect(() => {
     const updateSize = () => {
       setDimensions({
         width: window.innerWidth,
@@ -25,22 +21,33 @@ export default function ThankYouPage() {
       });
     };
     updateSize();
+
     window.addEventListener("resize", updateSize);
     return () => window.removeEventListener("resize", updateSize);
   }, []);
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (!redirected) {
+        router.push("/");
+      }
+    }, 6000);
+    return () => clearTimeout(timer);
+  }, [redirected, router]);
+
   return (
     <div className="flex flex-col min-h-screen bg-black text-white">
       {/* 🎊 Confetti */}
-      <Confetti
-        width={dimensions.width}
-        height={dimensions.height}
-        numberOfPieces={300}
-        gravity={0.3}
-        recycle={false}
-      />
+      {dimensions.width > 0 && (
+        <Confetti
+          width={dimensions.width}
+          height={dimensions.height}
+          numberOfPieces={300}
+          gravity={0.3}
+          recycle={false}
+        />
+      )}
 
-      {/* Main Content fills all available height */}
       <main className="flex-grow flex items-center justify-center px-4 py-20">
         <motion.div
           initial={{ scale: 0.8, opacity: 0 }}
@@ -62,6 +69,7 @@ export default function ThankYouPage() {
 
           <Link
             href="/"
+            onClick={() => setRedirected(true)}
             className="inline-block text-sm text-purple-500 underline hover:text-purple-300 transition"
           >
             ← Go back manually
@@ -69,7 +77,6 @@ export default function ThankYouPage() {
         </motion.div>
       </main>
 
-      {/* Footer always sticks to the bottom of the screen */}
       <footer className="text-center py-4 border-t border-neutral-800 text-zinc-400 text-sm">
         © {new Date().getFullYear()} DevMart. All rights reserved.
       </footer>

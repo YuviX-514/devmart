@@ -20,15 +20,13 @@ export default function LoginPage() {
 
     try {
       const res = await fetch("/api/auth/login", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-  },
-  body: JSON.stringify({ email, password }),
-  credentials: "include", // 💥💥 MUST for sending/receiving cookies
-});
-
-
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+        credentials: "include", // 💥💥 MUST for sending/receiving cookies
+      });
 
       const data = await res.json();
 
@@ -46,12 +44,13 @@ export default function LoginPage() {
         setError(data.error || "❌ Invalid credentials");
       }
     } catch (err) {
+      console.error(err);
       setError("❌ Something went wrong. Please try again.");
     }
   };
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-black px-4 ">
+    <main className="min-h-screen flex items-center justify-center bg-black px-4">
       <form
         onSubmit={handleSubmit}
         className="w-full max-w-md space-y-6 rounded-xl border border-neutral-800 bg-zinc-950 p-8 shadow-xl"
@@ -59,7 +58,7 @@ export default function LoginPage() {
         {/* Header */}
         <div className="space-y-2 text-center">
           <h1 className="text-2xl font-semibold text-white">
-            Log in to DevSync
+            Log in to DevMart
           </h1>
           <p className="text-sm text-neutral-400">
             Don’t have an account?{" "}
@@ -94,6 +93,7 @@ export default function LoginPage() {
             placeholder="••••••••"
           />
         </div>
+
         {error && (
           <div className="text-red-500 bg-red-100 border border-red-400 p-2 rounded text-sm">
             {error}
@@ -115,7 +115,7 @@ export default function LoginPage() {
         </button>
         <div>
           <p className="text-sm text-neutral-400 text-center">
-            Dont't have an account?{" "}
+            Don’t have an account?{" "}
             <Link href="/auth/signup" className="text-white hover:underline">
               Sign up
             </Link>
@@ -124,15 +124,17 @@ export default function LoginPage() {
 
         {/* OAuth Options */}
         <div className="space-y-2 pt-4">
-          {["Continue with GitHub", "Continue with Google"].map((provider) => (
-            <button
-              key={provider}
-              type="button"
-              className="w-full rounded-md bg-zinc-800 px-4 py-2 text-white hover:bg-zinc-700 transition"
-            >
-              {provider}
-            </button>
-          ))}
+          {["Continue with GitHub", "Continue with Google"].map(
+            (provider) => (
+              <button
+                key={provider}
+                type="button"
+                className="w-full rounded-md bg-zinc-800 px-4 py-2 text-white hover:bg-zinc-700 transition"
+              >
+                {provider}
+              </button>
+            )
+          )}
         </div>
       </form>
     </main>

@@ -1,13 +1,14 @@
 "use client";
+
 import * as React from "react";
-import { cn } from "@/lib/utils";import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
+import { motion } from "framer-motion";
 import type { ComponentPropsWithoutRef } from "react";
 
 export interface ButtonProps
   extends ComponentPropsWithoutRef<typeof motion.button> {
   variant?: "default" | "ghost";
 }
-
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant = "default", ...props }, ref) => {

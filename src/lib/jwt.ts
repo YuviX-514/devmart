@@ -6,8 +6,6 @@ export const generateToken = (userId: string) => {
   return jwt.sign({ userId }, JWT_SECRET, { expiresIn: "7d" });
 };
 
-export const verifyToken = (token: string): {
-  [x: string]: any; userId: string 
-} => {
+export const verifyToken = (token: string): { userId: string } => {
   return jwt.verify(token, JWT_SECRET) as { userId: string };
 };

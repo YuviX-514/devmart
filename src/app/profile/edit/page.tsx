@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useUser } from "@/context/userContext";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 export default function EditProfilePage() {
   const { user, setUser } = useUser();
@@ -11,16 +12,23 @@ export default function EditProfilePage() {
   const [name, setName] = useState(user?.name || "");
   const [bio, setBio] = useState(user?.bio || "");
   const [avatar, setAvatar] = useState(user?.avatar || "");
-
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!user) {
+      router.push("/auth/login");
+    }
+  }, [user, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
-    setMessage(null);
 
-    console.log("Submitting bio:", bio);
+    if (!name.trim()) {
+      toast.error("Name cannot be empty");
+      return;
+    }
+
+    setLoading(true);
 
     try {
       const token = localStorage.getItem("token");
@@ -28,7 +36,7 @@ export default function EditProfilePage() {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`, // send token for auth
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ name, bio, avatar }),
       });
@@ -37,13 +45,13 @@ export default function EditProfilePage() {
 
       if (res.ok) {
         setUser(data.user);
-        setMessage("✅ Profile updated!");
+        toast.success("✅ Profile updated!");
         setTimeout(() => router.push("/profile"), 1500);
       } else {
-        setMessage(`❌ ${data.error || "Update failed"}`);
+        toast.error(data.error || "❌ Update failed");
       }
     } catch (err) {
-      setMessage("❌ Something went wrong");
+      toast.error("❌ Something went wrong");
     } finally {
       setLoading(false);
     }
@@ -87,22 +95,20 @@ export default function EditProfilePage() {
           />
         </div>
 
-        {message && (
-          <p
-            className={`text-sm rounded p-2 text-center ${
-              message.startsWith("✅")
-                ? "bg-green-100 text-green-600"
-                : "bg-red-100 text-red-600"
-            }`}
-          >
-            {message}
-          </p>
+        {avatar && (
+          <img
+            src={avatar}
+            alt="Avatar Preview"
+            className="w-24 h-24 rounded-full mx-auto border border-zinc-700 mt-4"
+          />
         )}
 
         <button
           type="submit"
           disabled={loading}
-          className="w-full rounded bg-purple-600 hover:bg-purple-700 py-2 font-semibold text-white transition"
+          className={`w-full rounded bg-purple-600 hover:bg-purple-700 py-2 font-semibold text-white transition ${
+            loading ? "opacity-50 cursor-not-allowed" : ""
+          }`}
         >
           {loading ? "Saving..." : "Save Changes"}
         </button>

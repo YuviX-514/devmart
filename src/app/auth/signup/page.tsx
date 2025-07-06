@@ -6,8 +6,15 @@ import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
+interface SignupFormData {
+  first: string;
+  last: string;
+  email: string;
+  password: string;
+}
+
 export default function SignupPage() {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<SignupFormData>({
     first: "",
     last: "",
     email: "",
@@ -49,6 +56,7 @@ export default function SignupPage() {
         router.push("/auth/login");
       }, 2000);
     } catch (err) {
+      console.error(err);
       setError("❌ Something went wrong. Try again.");
     }
   };
@@ -62,7 +70,7 @@ export default function SignupPage() {
         {/* Header */}
         <div className="space-y-2 text-center">
           <h1 className="text-2xl font-semibold text-white">
-            Create a DevSync Account
+            Create a DevMart Account
           </h1>
           <p className="text-sm text-neutral-400">
             Start building, collaborating, and launching today.

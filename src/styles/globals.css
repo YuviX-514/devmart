@@ -1,12 +1,10 @@
 @import "tailwindcss";
-
 @import "@fontsource/urbanist";
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
 }
-
 
 @media (prefers-color-scheme: dark) {
   :root {
@@ -20,18 +18,26 @@ body {
   cursor: default;
   background: var(--background);
   color: var(--foreground);
-   font-family: 'Urbanist', sans-serif;
+  font-family: 'Urbanist', sans-serif;
 }
+
 @keyframes marquee {
   0% {
-    transform: translateX(0%);
+    transform: translateX(0%) rotate(-5deg);
+  }
+  50% {
+    transform: translateX(-25%) rotate(5deg);
   }
   100% {
-    transform: translateX(-50%);
+    transform: translateX(-50%) rotate(-5deg);
   }
+}
+
+@keyframes wiggle-slow {
   0%, 100% { transform: rotate(-5deg); }
   50% { transform: rotate(5deg); }
 }
+
 .animate-wiggle-slow {
   animation: wiggle-slow 2s infinite ease-in-out;
 }
@@ -44,7 +50,7 @@ input, textarea, [contenteditable="true"] {
   user-select: text;
   cursor: text;
 }
-/* Tailwind stuff already there */
+
 html {
   scroll-behavior: smooth;
 }
