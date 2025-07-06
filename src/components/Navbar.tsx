@@ -384,7 +384,7 @@ export default function Navbar() {
 
   {/* Avatar at Bottom Always */}
   {isLoggedIn && (
-    <div className="absolute bottom-0 w-full px-4 py-4 border-t border-neutral-700">
+    <div className="absolute bottom-0 w-full px-4 py-4 mb-6 border-t border-neutral-700">
       <div className="flex items-center gap-3">
         <Image
           src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e"
@@ -450,7 +450,7 @@ export default function Navbar() {
       </Link>
     </div>
   )}
-</aside>
+    </aside>
 
     </header>
   );
